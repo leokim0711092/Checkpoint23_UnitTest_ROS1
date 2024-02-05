@@ -33,7 +33,7 @@ class TestWaypoint(unittest.TestCase):
         self.final_x = 0
         self.final_y = 0
         self.final_yaw = 0
-
+        self.result = False
         self.x_diff =0
         self.y_diff =0
         self.yaw_diff =0
@@ -56,7 +56,7 @@ class TestWaypoint(unittest.TestCase):
         self.final_x = self.current_position.x
         self.final_y = self.current_position.y
         self.final_yaw = self.euler_to_quaternion(self.current_orientation)
-        client.get_result()
+        self.result = client.get_result()
 
         self.x_diff = abs(self.final_x - dest.x)
         self.y_diff = abs(self.final_y - dest.y)
@@ -77,14 +77,12 @@ class TestWaypoint(unittest.TestCase):
 
     def test_xy(self):
         
+        self.assertTrue((-0.02 <= self.xy_deff <= 0.02), "Failure, XY error is over 0.03")
 
-        self.assertTrue((-0.07 <= self.xy_deff <= 0.07), "Failure, Yaw is out of error 0.05")
-
-        #self.assertTrue(((-0.5 <= xy_deff <= 0.5)), "Failure, Position is out of error 0.5")
     
     def test_yaw(self):
         yaw_diff = self.final_yaw - self.initial_yaw
-        self.assertTrue(((-0.5 <= yaw_diff <= 0.5)), "Failure, Yaw is out of error 0.05")
+        self.assertTrue(((-0.5 <= yaw_diff <= 0.5)), "Failure, Yaw error is over 0.5")
 
 
 
