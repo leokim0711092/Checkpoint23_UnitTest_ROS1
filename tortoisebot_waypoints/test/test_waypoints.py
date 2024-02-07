@@ -80,7 +80,7 @@ class TestWaypoint(unittest.TestCase):
 
     def test_xy(self):
         
-        self.assertTrue((-0.05 <= self.xy_deff <= 0.05), "Failure, XY error is over 0.03")
+        self.assertTrue((-0.02 <= self.xy_deff <= 0.02), "Failure, XY error is over 0.03")
 
     
     def test_yaw(self):
@@ -88,7 +88,7 @@ class TestWaypoint(unittest.TestCase):
         print("Desired yaw:", self.desired_yaw)
 
         
-        self.assertTrue(((-1 <= self.yaw_diff <= 1)), "Failure, Yaw error is over 1")
+        self.assertTrue(((0.5 <= self.yaw_diff <= 0.5)), "Failure, Yaw error is over 0.5")
 
 
 
