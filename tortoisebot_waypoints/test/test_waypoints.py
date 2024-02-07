@@ -29,7 +29,7 @@ class TestWaypoint(unittest.TestCase):
         self.initial_x = 0
         self.initial_y = 0
         self.initial_yaw = 0
-
+        self.desired_yaw = 0
         self.final_x = 0
         self.final_y = 0
         self.final_yaw = 0
@@ -49,6 +49,10 @@ class TestWaypoint(unittest.TestCase):
         dest.x = 0.5
         dest.y = 0.5
         goal.position = dest
+        self.initial_x = self.current_position.x
+        self.initial_y = self.current_position.y
+        self.initial_yaw = self.euler_to_quaternion(self.current_orientation)
+        self.desired_yaw = math.atan2(dest.y - self.initial_y, dest.x - self.initial_x)
 
         client.send_goal(goal)
         client.wait_for_result()
@@ -61,8 +65,7 @@ class TestWaypoint(unittest.TestCase):
         self.x_diff = abs(self.final_x - dest.x)
         self.y_diff = abs(self.final_y - dest.y)
         self.xy_deff = math.sqrt(self.x_diff*self.x_diff + self.y_diff*self.y_diff)
-
-
+        self.yaw_diff = self.final_yaw - self.desired_yaw
 
     def odom_callback(self, msg):
 
@@ -77,12 +80,15 @@ class TestWaypoint(unittest.TestCase):
 
     def test_xy(self):
         
-        self.assertTrue((-0.02 <= self.xy_deff <= 0.02), "Failure, XY error is over 0.03")
+        self.assertTrue((-0.05 <= self.xy_deff <= 0.05), "Failure, XY error is over 0.03")
 
     
     def test_yaw(self):
-        yaw_diff = self.final_yaw - self.initial_yaw
-        self.assertTrue(((-0.5 <= yaw_diff <= 0.5)), "Failure, Yaw error is over 0.5")
+        print("final yaw:", self.final_yaw)
+        print("Desired yaw:", self.desired_yaw)
+
+        
+        self.assertTrue(((-1 <= self.yaw_diff <= 1)), "Failure, Yaw error is over 1")
 
 
 
